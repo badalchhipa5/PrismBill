@@ -16,12 +16,12 @@ jobs:
                   node-version: 20
                   cache: 'npm'
             - run: npm ci
-            - run: npm run build --workspace=@prismbill/shared-types
+            - run: npm --workspace=@prismbill/shared-type run build
             - run: npm run lint
             - run: npm run format:check
             - run: npx tsc --noEmit --project client/tsconfig.json
             - run: npx tsc --noEmit --project server/tsconfig.json
-            - run: npx tsc --noEmit --project shared-types/tsconfig.json
+            - run: npx tsc --noEmit --project packages/shared-type/tsconfig.json
 
 #   unit-tests:
 #     needs: lint-and-typecheck
