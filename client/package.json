@@ -1,0 +1,34 @@
+{
+    "name": "@prismbill/client",
+    "private": true,
+    "version": "0.0.0",
+    "description": "Frontend application for PrismBill",
+    "type": "module",
+    "engines": {
+        "node": ">=20.19.0"
+    },
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc -b && vite build",
+        "typecheck": "tsc -b --pretty false",
+        "lint": "eslint .",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "react": "^19.2.7",
+        "react-dom": "^19.2.7",
+        "@prismbill/shared-type": "1.0.0"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.29.7",
+        "@rolldown/plugin-babel": "^0.2.3",
+        "@types/babel__core": "^7.20.5",
+        "@types/node": "^24.13.2",
+        "@types/react": "^19.2.17",
+        "@types/react-dom": "^19.2.3",
+        "@vitejs/plugin-react": "^6.0.3",
+        "babel-plugin-react-compiler": "^1.0.0",
+        "eslint-plugin-react-refresh": "^0.5.3",
+        "vite": "^8.1.1"
+    }
+}

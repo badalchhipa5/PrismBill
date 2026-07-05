@@ -1,0 +1,51 @@
+{
+    "name": "prismbill",
+    "version": "1.0.0",
+    "description": "Split your bills ",
+    "homepage": "https://github.com/badalchhipa5/PrismBill#readme",
+    "bugs": {
+        "url": "https://github.com/badalchhipa5/PrismBill/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/badalchhipa5/PrismBill.git"
+    },
+    "license": "ISC",
+    "author": "Badal Chhipa",
+    "private": true,
+    "packageManager": "npm@11.13.0",
+    "engines": {
+        "node": ">=20.19.0",
+        "npm": ">=10.0.0"
+    },
+    "workspaces": [
+        "client",
+        "server",
+        "packages/*"
+    ],
+    "type": "module",
+    "main": "index.js",
+    "scripts": {
+        "dev": "npm run dev --workspace @prismbill/client",
+        "dev:client": "npm run dev --workspace @prismbill/client",
+        "dev:server": "npm run dev --workspace @prismbill/server",
+        "build": "npm run build --workspaces --if-present",
+        "test": "npm run test --workspaces --if-present",
+        "lint": "npm run lint --workspaces --if-present",
+        "format": "prettier --write .",
+        "format:check": "prettier --check ."
+    },
+    "devDependencies": {
+        "eslint": "^9.39.4",
+        "eslint-config-prettier": "^10.1.8",
+        "eslint-plugin-import": "^2.32.0",
+        "eslint-plugin-react": "^7.37.5",
+        "eslint-plugin-react-hooks": "^7.1.1",
+        "globals": "^17.7.0",
+        "prettier": "^3.9.4",
+        "typescript-eslint": "^8.62.1"
+    },
+    "dependencies": {
+        "typescript": "^6.0.3"
+    }
+}

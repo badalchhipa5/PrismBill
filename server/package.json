@@ -1,0 +1,23 @@
+{
+    "name": "@prismbill/server",
+    "version": "1.0.0",
+    "description": "Server application for PrismBill",
+    "license": "ISC",
+    "author": "Badal Chhipa",
+    "private": true,
+    "type": "module",
+    "main": "server.js",
+    "engines": {
+        "node": ">=20.19.0"
+    },
+    "scripts": {
+        "dev": "echo \"No server entrypoint configured yet\"",
+        "start": "echo \"No server entrypoint configured yet\"",
+        "build": "echo \"No build step configured yet\"",
+        "lint": "echo \"No lint step configured yet\"",
+        "test": "node --test"
+    },
+    "dependencies": {
+        "@prismbill/shared-type": "1.0.0"
+    }
+}
