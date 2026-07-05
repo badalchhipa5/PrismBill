@@ -1,0 +1,67 @@
+name: CI
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+
+jobs:
+    lint-and-typecheck:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  cache: 'npm'
+            - run: npm ci
+            - run: npm run build --workspace=@smartsplit/shared-types
+            - run: npm run lint
+            - run: npm run format:check
+            - run: npx tsc --noEmit --project client/tsconfig.json
+            - run: npx tsc --noEmit --project server/tsconfig.json
+            - run: npx tsc --noEmit --project shared-types/tsconfig.json
+
+#   unit-tests:
+#     needs: lint-and-typecheck
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
+#       - uses: actions/setup-node@v4
+#         with:
+#           node-version: 20
+#           cache: 'npm'
+#       - run: npm ci
+#       - run: npm run build --workspace=@smartsplit/shared-types
+#       - run: npm run test --workspace=server
+#       - run: npm run test --workspace=client
+
+#   integration-tests:
+#     needs: unit-tests
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
+#       - uses: actions/setup-node@v4
+#         with:
+#           node-version: 20
+#           cache: 'npm'
+#       - run: npm ci
+#       - run: npm run build --workspace=@smartsplit/shared-types
+#       - run: npm run test:integration --workspace=server
+#         env:
+#           MONGO_URI: ${{ secrets.MONGO_URI_TEST }}
+
+#   build:
+#     needs: integration-tests
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
+#       - uses: actions/setup-node@v4
+#         with:
+#           node-version: 20
+#           cache: 'npm'
+#       - run: npm ci
+#       - run: npm run build --workspace=@smartsplit/shared-types
+#       - run: npm run build --workspace=client
+#       - run: npm run build --workspace=server
