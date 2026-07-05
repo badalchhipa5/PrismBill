@@ -1,7 +1,7 @@
 {
     "name": "@prismbill/client",
     "private": true,
-    "version": "0.0.0",
+    "version": "1.0.0",
     "description": "Frontend application for PrismBill",
     "type": "module",
     "engines": {

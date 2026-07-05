@@ -23,6 +23,11 @@ export default [
         languageOptions: {
             globals: globals.browser,
         },
+        settings: {
+            react: {
+                version: 'detect',
+            },
+        },
         plugins: { react, 'react-hooks': reactHooks },
         rules: {
             ...react.configs.recommended.rules,
