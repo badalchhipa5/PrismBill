@@ -13,17 +13,12 @@ const PORT = process.env.PORT || 3000;
 const MONGODB_CONNECTION_STRING = process.env.MONGODB_CONNECTION_STRING || '';
 
 // Connect to MongoDB using Mongoose.
-mongoose
-    .connect(MONGODB_CONNECTION_STRING)
-    .then(() => {
-        console.log('\x1b[32m Connected to MongoDB');
-    })
-    .catch((error) => {
-        console.error('\x1b[31m Error connecting to MongoDB:', error);
-        process.exit(1); // Exit the process with an error code
-    });
+mongoose.connect(MONGODB_CONNECTION_STRING).catch((error) => {
+    console.error('\x1b[31m Error connecting to MongoDB:', error);
+    process.exit(1); // Exit the process with an error code
+});
 
 // Start the server and listen on the specified port
 app.listen(PORT, () => {
-    console.log(`\x1b[32m Server is running on port ${PORT}`);
+    console.log(`\x1b[32m Server is running on port ${PORT}`); // eslint-disable-line no-console
 });
