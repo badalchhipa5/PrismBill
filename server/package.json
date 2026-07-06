@@ -2,22 +2,32 @@
     "name": "@prismbill/server",
     "version": "1.0.0",
     "description": "Server application for PrismBill",
-    "license": "ISC",
     "author": "Badal Chhipa",
     "private": true,
     "type": "module",
-    "main": "server.js",
+    "main": "dist/server.js",
     "engines": {
         "node": ">=20.19.0"
     },
     "scripts": {
-        "dev": "echo \"No server entrypoint configured yet\"",
-        "start": "echo \"No server entrypoint configured yet\"",
-        "build": "echo \"No build step configured yet\"",
-        "lint": "echo \"No lint step configured yet\"",
+        "dev": "tsx watch server.ts",
+        "start": "node dist/server.js",
+        "build": "tsc -p tsconfig.json",
+        "lint": "eslint . --ext .ts",
         "test": "node --test"
     },
     "dependencies": {
-        "@prismbill/shared-type": "1.0.0"
+        "@prismbill/shared-type": "1.0.0",
+        "cors": "^2.8.6",
+        "dotenv": "^17.4.2",
+        "express": "^5.2.1",
+        "mongoose": "^9.7.3"
+    },
+    "devDependencies": {
+        "@types/cors": "^2.8.19",
+        "@types/express": "^5.0.6",
+        "@types/node": "^24.13.2",
+        "tsx": "^4.23.0",
+        "typescript": "^6.0.3"
     }
 }
