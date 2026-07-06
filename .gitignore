@@ -2,10 +2,6 @@
 node_modules/
 **/node_modules/
 
-# Lockfiles
-package-lock.json
-**/package-lock.json
-
 # Build output
 dist/
 **/dist/
@@ -40,3 +36,4 @@ coverage/
 # Misc
 *.pem
 *.key
+
