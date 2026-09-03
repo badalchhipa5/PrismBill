@@ -1,5 +1,5 @@
 // External dependencies
-import type { RequestHandler } from 'express';
+import type { RequestHandler, Response } from 'express';
 import jwt, { type SignOptions, type JwtPayload } from 'jsonwebtoken';
 import crypto from 'crypto';
 
@@ -31,7 +31,17 @@ export const signJwt = (id: string): string => {
     } as SignOptions);
 };
 
-export const sendAuthTokenResponse = (user: any, res: any, statusCode: number) => {
+type AuthenticatedUser = {
+    id: string;
+    userName: string;
+    userEmail: string;
+};
+
+export const sendAuthTokenResponse = (
+    user: AuthenticatedUser,
+    res: Response,
+    statusCode: number
+) => {
     const token = signJwt(user.id);
     return res.status(statusCode).json({
         status: 'success',

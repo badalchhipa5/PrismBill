@@ -4,7 +4,7 @@ import fs from 'fs';
 import { v4 as uuid } from 'uuid';
 
 // Internal dependencies
-import billModel, { BillDocument } from '../model/billModel';
+import billModel from '../model/billModel';
 import performOcrOnReceipt from '../services/ocr';
 import { extractReceiptData } from '../services/gemini/gemini';
 import uploadImageToCloudinary from '../services/cloudinary';
@@ -47,8 +47,7 @@ export const processReceipt: RequestHandler = async (req, res, next) => {
             id: uuid(),
             merchantName: extractedReceiptData.merchantName || 'Not mentioned',
             date: extractedReceiptData.date || 'Not mentioned',
-            // imageUrl: imageUrl,
-            imageUrl: 'anything for now',
+            imageUrl,
             subtotal: Number(extractedReceiptData.subtotal ?? 0),
             tax: Number(extractedReceiptData.tax ?? 0),
             tip: Number(extractedReceiptData.tip ?? 0),
@@ -67,17 +66,20 @@ export const processReceipt: RequestHandler = async (req, res, next) => {
             message: 'Receipt processed successfully',
             data: extractedReceiptData,
         });
-    } catch (error: any) {
+    } catch (error: unknown) {
+        const errorName = error instanceof Error ? error.name : '';
+        const errorMessage = error instanceof Error ? error.message : 'Failed to process receipt';
+
         if (
-            error.name.includes('GEMINI') ||
-            error.name.includes('CLOUDINARY') ||
-            error.name.includes('OCR')
+            errorName.includes('GEMINI') ||
+            errorName.includes('CLOUDINARY') ||
+            errorName.includes('OCR')
         ) {
             return next(error);
         }
         return next(
             new AppError(
-                error.message || 'Failed to process receipt',
+                errorMessage,
                 500,
                 'RECEIPT_PROCESSING_ERROR'
             )

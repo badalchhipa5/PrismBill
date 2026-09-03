@@ -9,6 +9,10 @@ export default [
     js.configs.recommended,
     ...tseslint.configs.recommended,
 
+    {
+        ignores: ['**/dist/**'],
+    },
+
     // Server-specific
     {
         files: ['server/**/*.ts'],

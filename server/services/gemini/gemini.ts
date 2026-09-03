@@ -48,7 +48,7 @@ const aiClient = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
 export const extractReceiptData = async (failoverOptions: FailoverOptions, rawText: string) => {
     const { models, maxAttemptsPerModel = 2, cooldownTimeMs = 120_000 } = failoverOptions;
 
-    for (let model of models) {
+    for (const model of models) {
         if (isDegraded(model)) {
             continue;
         }
@@ -71,7 +71,7 @@ export const extractReceiptData = async (failoverOptions: FailoverOptions, rawTe
                 const responseText = response.text?.trim() || '{}';
 
                 return JSON.parse(responseText) as ExtractedReceipt;
-            } catch (error: any) {
+            } catch (error: unknown) {
                 const geminiError = mapGeminiError(error);
 
                 if (geminiError.name === 'GEMINI_MODEL_REJECTION') {

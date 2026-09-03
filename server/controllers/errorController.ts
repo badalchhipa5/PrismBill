@@ -76,7 +76,7 @@ const normalizeError = (err: AppErrorLike): AppError => {
     return normalizedError;
 };
 
-export default (err: AppErrorLike, req: Request, res: Response, next: NextFunction) => {
+export default (err: AppErrorLike, _req: Request, res: Response, _next: NextFunction) => {
     const error = normalizeError(err);
 
     if (secrets.server.NODE_ENV.trim() === 'production') {
