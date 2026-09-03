@@ -19,9 +19,6 @@ pnpm-debug.log*
 # Runtime uploads
 server/tmp/uploads/
 
-# Enhancement plans
-**/ENHANCEMENT_PLAN.md
-
 # OS files
 .DS_Store
 Thumbs.db
