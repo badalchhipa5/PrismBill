@@ -77,13 +77,7 @@ export const processReceipt: RequestHandler = async (req, res, next) => {
         ) {
             return next(error);
         }
-        return next(
-            new AppError(
-                errorMessage,
-                500,
-                'RECEIPT_PROCESSING_ERROR'
-            )
-        );
+        return next(new AppError(errorMessage, 500, 'RECEIPT_PROCESSING_ERROR'));
     } finally {
         if (uploadedFile?.path) {
             fs.unlink(uploadedFile.path, (unlinkError) => {

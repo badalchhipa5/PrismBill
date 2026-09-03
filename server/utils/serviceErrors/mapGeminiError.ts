@@ -15,7 +15,10 @@ const mapGeminiError = (error: unknown) => {
         errorName: errorDetails.name || 'GEMINI_ERROR',
     };
 
-    if (errorDetails.status === 401 && errorMessage.includes('invalid authentication credentials.')) {
+    if (
+        errorDetails.status === 401 &&
+        errorMessage.includes('invalid authentication credentials.')
+    ) {
         geminiError.statusCode = 401;
         geminiError.errorMessage = 'Invalid gemini api key.';
         geminiError.errorName = 'GEMINI_INVALID_SECRETS';

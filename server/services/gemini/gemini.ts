@@ -85,7 +85,7 @@ export const extractReceiptData = async (failoverOptions: FailoverOptions, rawTe
                     attempt = 0;
                     break;
                 } else {
-                   throw geminiError;
+                    throw geminiError;
                 }
             }
         }

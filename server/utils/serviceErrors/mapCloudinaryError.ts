@@ -28,7 +28,10 @@ const mapCloudinaryError = (error: unknown) => {
         cloudError.statusCode = 404;
         cloudError.errorMessage = 'Requested Cloudinary resource not found.';
         cloudError.errorName = 'CLOUDINARY_RESOURCE_NOT_FOUND';
-    } else if (errorDetails.http_code === 400 || /invalid|bad request|unsupported/i.test(errorMessage)) {
+    } else if (
+        errorDetails.http_code === 400 ||
+        /invalid|bad request|unsupported/i.test(errorMessage)
+    ) {
         //  Invalid request / bad input
         cloudError.statusCode = 400;
         cloudError.errorMessage = 'Invalid request payload or unsupported parameter.';

@@ -2,12 +2,12 @@
 import { Schema, Document } from 'mongoose';
 
 // Internal dependencies
-import { Item } from '@prismbill/shared-type';
+import { ItemWithAssignments } from '@prismbill/shared-type';
 
 /**
  * Mongoose document shape for bill items.
  */
-export interface ItemDocument extends Item, Document {}
+export interface ItemDocument extends ItemWithAssignments, Document {}
 
 export default new Schema<ItemDocument>({
     itemId: { type: String, required: true },
