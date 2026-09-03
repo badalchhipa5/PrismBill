@@ -7,6 +7,7 @@ import crypto from 'crypto';
 import secrets from '../config/secrets';
 
 import { UserModel } from '../model/userModel';
+import type { AuthenticatedUser } from '../types/auth';
 import { sendEmail } from '../utils/email';
 import AppError from '../utils/appError';
 import { AUTH_ERROR_MESSAGES } from '../utils/errorMessages';
@@ -29,12 +30,6 @@ export const signJwt = (id: string): string => {
     return jwt.sign({ id }, secrets.jwt.JWT_SECRET, {
         expiresIn: secrets.jwt.JWT_EXPIRE,
     } as SignOptions);
-};
-
-type AuthenticatedUser = {
-    id: string;
-    userName: string;
-    userEmail: string;
 };
 
 export const sendAuthTokenResponse = (

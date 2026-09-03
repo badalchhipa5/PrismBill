@@ -1,23 +1,13 @@
 // Internal dependencies
 import AppError from '../appError';
-
-interface OcrErrorDetails {
-    statusCode: number;
-    errorMessage: string;
-    errorName: string;
-}
-
-type OcrErrorInput = {
-    message?: string;
-    name?: string;
-};
+import type { ServiceErrorDetails, ServiceErrorInput } from '../../types/errors';
 
 const mapOcrError = (error: unknown) => {
     const errorDetails = (
         typeof error === 'object' && error !== null ? error : {}
-    ) as OcrErrorInput;
+    ) as ServiceErrorInput;
     const errorMessage = errorDetails.message ?? '';
-    const ocrError: OcrErrorDetails = {
+    const ocrError: ServiceErrorDetails = {
         statusCode: 500,
         errorMessage: errorMessage || 'Unexpected OCR error occurred.',
         errorName: errorDetails.name || 'OCR_ERROR',

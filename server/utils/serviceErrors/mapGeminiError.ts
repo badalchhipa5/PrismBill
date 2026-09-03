@@ -2,17 +2,12 @@
 import { GeminiErrorDetails } from '../../services/gemini/geminiTypes';
 
 import AppError from '../appError';
-
-type GeminiErrorInput = {
-    status?: number | string;
-    message?: string;
-    name?: string;
-};
+import type { ServiceErrorInput } from '../../types/errors';
 
 const mapGeminiError = (error: unknown) => {
     const errorDetails = (
         typeof error === 'object' && error !== null ? error : {}
-    ) as GeminiErrorInput;
+    ) as ServiceErrorInput;
     const errorMessage = errorDetails.message ?? '';
     const geminiError: GeminiErrorDetails = {
         statusCode: typeof errorDetails.status === 'number' ? errorDetails.status : 500,

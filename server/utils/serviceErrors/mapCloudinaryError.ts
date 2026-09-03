@@ -1,24 +1,13 @@
 // Internal dependencies
 import AppError from '../appError';
-
-interface CloudinaryErrorDetails {
-    statusCode: number;
-    errorMessage: string;
-    errorName: string;
-}
-
-type CloudinaryErrorInput = {
-    http_code?: number;
-    message?: string;
-    name?: string;
-};
+import type { ServiceErrorDetails, ServiceErrorInput } from '../../types/errors';
 
 const mapCloudinaryError = (error: unknown) => {
     const errorDetails = (
         typeof error === 'object' && error !== null ? error : {}
-    ) as CloudinaryErrorInput;
+    ) as ServiceErrorInput;
     const errorMessage = errorDetails.message ?? '';
-    const cloudError: CloudinaryErrorDetails = {
+    const cloudError: ServiceErrorDetails = {
         statusCode: errorDetails.http_code || 500,
         errorMessage: errorMessage || 'Unknown Cloudinary error occurred.',
         errorName: errorDetails.name || 'CLOUDINARY_ERROR',
