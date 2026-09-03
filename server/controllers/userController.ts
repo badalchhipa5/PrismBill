@@ -70,8 +70,7 @@ export const deleteUser: RequestHandler = async (req, res, next) => {
             message:
                 'Your account has been scheduled for deletion. It will be permanently deleted after 90 days. You can reactivate your account by logging in before the deletion date.',
         });
-    } catch (error) {
-        console.error('Delete user error:', error);
+    } catch {
         return next(new AppError(AUTH_ERROR_MESSAGES.deleteUserFailed, 400));
     }
 };

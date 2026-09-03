@@ -68,7 +68,7 @@ export const requireAuthentication: RequestHandler = async (req, res, next) => {
         const currentUser = await UserModel.findOne({ _id: decoded.id });
 
         // Throw error if user doesn't exist.
-        if (!currentUser) return next(new AppError(AUTH_ERROR_MESSAGES.notLoggedIn, 401));
+        if (!currentUser) return next(new AppError(AUTH_ERROR_MESSAGES.userNotFound, 401));
 
         // Check if user have changed password after logging in.
         if (currentUser.isPasswordChangedAfter(decoded.iat as number)) {
@@ -175,12 +175,7 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
         user.userPasswordResetExpireAt = undefined;
         await user.save();
 
-        const verificationToken = signJwt(user.id);
-
-        return res.status(200).json({
-            status: 'success',
-            token: verificationToken,
-        });
+        return sendAuthTokenResponse(user, res, 200);
     } catch (error) {
         next(error);
     }
@@ -207,12 +202,7 @@ export const changePassword: RequestHandler = async (req, res, next) => {
         user.userConfirmPassword = confirmPassword;
         await user.save();
 
-        const verificationToken = signJwt(user.id);
-
-        return res.status(200).json({
-            status: 'success',
-            token: verificationToken,
-        });
+        return sendAuthTokenResponse(user, res, 200);
     } catch (error) {
         next(error);
     }

@@ -6,7 +6,7 @@ import { v4 as uuid } from 'uuid';
 // Internal dependencies
 import billModel from '../model/billModel';
 import performOcrOnReceipt from '../services/ocr';
-import { extractReceiptData } from '../services/gemini/gemini';
+import extractReceiptData from '../services/gemini/gemini';
 import uploadImageToCloudinary from '../services/cloudinary';
 
 import AppError from '../utils/appError';
@@ -40,8 +40,6 @@ export const processReceipt: RequestHandler = async (req, res, next) => {
             },
             extractedText
         );
-
-        if (!extractedReceiptData) throw new Error('Extracted data is undefined');
 
         await billModel.create({
             id: uuid(),

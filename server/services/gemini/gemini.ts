@@ -45,7 +45,58 @@ const prompt = `
     `;
 const aiClient = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
 
-export const extractReceiptData = async (failoverOptions: FailoverOptions, rawText: string) => {
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+    typeof value === 'object' && value !== null;
+
+const isNullableString = (value: unknown): value is string | null =>
+    value === null || typeof value === 'string';
+
+const isNullableNumber = (value: unknown): value is number | null =>
+    value === null || (typeof value === 'number' && Number.isFinite(value));
+
+const isExtractedReceipt = (value: unknown): value is ExtractedReceipt => {
+    if (!isRecord(value) || !Array.isArray(value.items)) {
+        return false;
+    }
+
+    const hasValidItems = value.items.every(
+        (item) =>
+            isRecord(item) &&
+            typeof item.itemId === 'string' &&
+            typeof item.name === 'string' &&
+            typeof item.price === 'number' &&
+            Number.isFinite(item.price) &&
+            typeof item.quantity === 'number' &&
+            Number.isFinite(item.quantity) &&
+            typeof item.category === 'string'
+    );
+
+    return (
+        hasValidItems &&
+        isNullableString(value.merchantName) &&
+        isNullableString(value.date) &&
+        isNullableNumber(value.subtotal) &&
+        isNullableNumber(value.tax) &&
+        isNullableNumber(value.tip) &&
+        isNullableNumber(value.total) &&
+        isNullableString(value.currency)
+    );
+};
+
+const parseExtractedReceipt = (responseText: string): ExtractedReceipt => {
+    const parsedData: unknown = JSON.parse(responseText);
+
+    if (!isExtractedReceipt(parsedData)) {
+        throw new Error('Gemini returned an invalid receipt structure.');
+    }
+
+    return parsedData;
+};
+
+const extractReceiptData = async (
+    failoverOptions: FailoverOptions,
+    rawText: string
+): Promise<ExtractedReceipt> => {
     const { models, maxAttemptsPerModel = 2, cooldownTimeMs = 120_000 } = failoverOptions;
 
     for (const model of models) {
@@ -68,9 +119,13 @@ export const extractReceiptData = async (failoverOptions: FailoverOptions, rawTe
                     40_000
                 );
 
-                const responseText = response.text?.trim() || '{}';
+                const responseText = response.text?.trim();
 
-                return JSON.parse(responseText) as ExtractedReceipt;
+                if (!responseText) {
+                    throw new Error('Gemini returned an empty response.');
+                }
+
+                return parseExtractedReceipt(responseText);
             } catch (error: unknown) {
                 const geminiError = mapGeminiError(error);
 
@@ -90,4 +145,8 @@ export const extractReceiptData = async (failoverOptions: FailoverOptions, rawTe
             }
         }
     }
+
+    throw new Error('No Gemini model was available to extract receipt data.');
 };
+
+export default extractReceiptData;
