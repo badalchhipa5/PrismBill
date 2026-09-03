@@ -1,3 +1,4 @@
+// Internal dependencies
 import { Item } from './item';
 
 export type BillStatus = 'processing' | 'review' | 'finalized';
@@ -9,18 +10,22 @@ export interface Participant {
 }
 
 export interface Bill {
-    id: string;
-    userId: string;
     merchantName: string;
     date: string;
-    imageUrl: string;
-    subtotal: number;
-    tax: number;
-    tip: number;
-    total: number;
     items: Item[];
+    subtotal?: number | undefined;
+    tax: number;
+    tip?: number;
+    total: number;
+    currency?: string | null;
+}
+
+export interface BillRecord extends Bill {
+    id: string;
+    userId: string;
+    imageUrl: string;
     participants: Participant[];
     status: BillStatus;
-    createdAt: string;
-    updatedAt: string;
+    createdAt: Date;
+    updatedAt: Date;
 }

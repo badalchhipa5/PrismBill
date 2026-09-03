@@ -3,6 +3,9 @@ export interface Item {
     name: string;
     price: number;
     quantity: number;
-    ocrConfidence?: number;
-    assignedTo: string[]; // participantIds
+    category: string;
+}
+
+export interface ItemWithAssignments extends Item {
+    assignedTo?: string[] | null;
 }
