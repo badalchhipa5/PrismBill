@@ -95,7 +95,8 @@ const parseExtractedReceipt = (responseText: string): ExtractedReceipt => {
 
 const extractReceiptData = async (
     failoverOptions: FailoverOptions,
-    rawText: string
+    rawText: string,
+    temperature = 0.2
 ): Promise<ExtractedReceipt> => {
     const { models, maxAttemptsPerModel = 2, cooldownTimeMs = 120_000 } = failoverOptions;
 
@@ -114,7 +115,43 @@ const extractReceiptData = async (
                         aiClient.models.generateContent({
                             model,
                             contents: prompt + rawText,
-                            config: { abortSignal },
+                            config: {
+                                abortSignal,
+                                temperature,
+                                responseMimeType: 'application/json',
+                                responseSchema: {
+                                    type: 'object',
+                                    properties: {
+                                        merchantName: { type: ['string', 'null'] },
+                                        date: { type: ['string', 'null'] },
+                                        items: {
+                                            type: 'array',
+                                            items: {
+                                                type: 'object',
+                                                properties: {
+                                                    itemId: { type: 'string' },
+                                                    name: { type: 'string' },
+                                                    price: { type: 'number' },
+                                                    quantity: { type: 'number' },
+                                                    category: { type: 'string' },
+                                                },
+                                                required: [
+                                                    'itemId',
+                                                    'name',
+                                                    'price',
+                                                    'quantity',
+                                                    'category',
+                                                ],
+                                            },
+                                        },
+                                        subtotal: { type: ['number', 'null'] },
+                                        tax: { type: ['number', 'null'] },
+                                        tip: { type: ['number', 'null'] },
+                                        total: { type: ['number', 'null'] },
+                                        currency: { type: ['string', 'null'] },
+                                    },
+                                },
+                            },
                         }),
                     40_000
                 );
