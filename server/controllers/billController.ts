@@ -10,18 +10,18 @@ import extractReceiptData from '../services/gemini/gemini';
 import uploadImageToCloudinary from '../services/cloudinary';
 
 import AppError from '../utils/appError';
-import { AUTH_ERROR_MESSAGES } from '../utils/errorMessages';
+import { BILL_ERROR_MESSAGES } from '../utils/errorMessages';
 
 /**
  * Handles receipt upload, OCR, AI extraction, persistence, and response to the client.
  */
-export const processReceipt: RequestHandler = async (req, res, next) => {
+export const addReceipt: RequestHandler = async (req, res, next) => {
     // Access the uploaded file from the request object.
     const uploadedFile = req.file as Express.Multer.File | undefined;
 
     // Validate that a file was uploaded.
     if (!uploadedFile?.filename) {
-        res.status(400).json({ status: 'fail', message: AUTH_ERROR_MESSAGES.noReceiptImage });
+        res.status(400).json({ status: 'fail', message: BILL_ERROR_MESSAGES.noReceiptImage });
         return;
     }
 
@@ -30,7 +30,8 @@ export const processReceipt: RequestHandler = async (req, res, next) => {
         const extractedText = await performOcrOnReceipt(uploadedFile.filename);
 
         // Upload the image to Cloudinary and get the URL.
-        const imageUrl = await uploadImageToCloudinary(uploadedFile);
+        // const imageUrl = await uploadImageToCloudinary(uploadedFile);
+        const imageUrl = 'await uploadImageToCloudinary(uploadedFile)';
 
         const extractedReceiptData = await extractReceiptData(
             {
@@ -42,9 +43,8 @@ export const processReceipt: RequestHandler = async (req, res, next) => {
         );
 
         await billModel.create({
-            id: uuid(),
-            merchantName: extractedReceiptData.merchantName || 'Not mentioned',
-            date: extractedReceiptData.date || 'Not mentioned',
+            merchantName: extractedReceiptData.merchantName || 'Unknown',
+            date: extractedReceiptData.date || 'Unknown',
             imageUrl,
             subtotal: Number(extractedReceiptData.subtotal ?? 0),
             tax: Number(extractedReceiptData.tax ?? 0),
@@ -54,7 +54,7 @@ export const processReceipt: RequestHandler = async (req, res, next) => {
                 ...item,
                 assignedTo: [],
             })),
-            participants: [],
+            members: [],
             status: 'processing',
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),

@@ -18,7 +18,7 @@ export const billSchema = new Schema<BillDocument>({
     tip: { type: Number },
     total: { type: Number, required: true },
     items: [itemSchema],
-    participants: [
+    members: [
         {
             participantId: { type: String, required: true },
             name: { type: String, required: true },

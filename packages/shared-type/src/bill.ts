@@ -24,7 +24,7 @@ export interface BillRecord extends Bill {
     id: string;
     userId: string;
     imageUrl: string;
-    participants: Participant[];
+    members: Participant[];
     status: BillStatus;
     createdAt: Date;
     updatedAt: Date;
