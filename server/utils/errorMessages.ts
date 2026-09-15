@@ -16,11 +16,17 @@ export const AUTH_ERROR_MESSAGES = {
         'Provided reset token does not match any user. Please request a new password reset token.',
     invalidCurrentPassword:
         'Your current password is incorrect. Please provide the correct current password.',
-    // Bills related errors
+} as const;
 
+export const BILL_ERROR_MESSAGES = {
     noReceiptImage: 'No receipt image uploaded. Please upload a receipt image to proceed.',
     lowOcrConfidence: 'Low OCR confidence, text may be invalid.',
-    dataExtractionError: 'Something went wrong ',
+    dataExtractionError: 'Something went wrong during data extraction.',
+    billNotFound: 'Bill not found. Please check the bill ID and try again.',
+    memberNotFound: 'Member not found. Please check the member ID and try again.',
+    invalidBillData: 'Invalid bill data provided. Please check the input and try again.',
+    invalidMemberData: 'Invalid member data provided. Please check the input and try again.',
+    duplicateMember: 'This member is already added to the bill. Please add a different member.',
 } as const;
 
 export const APP_ERROR_MESSAGES = {
