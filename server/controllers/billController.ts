@@ -86,3 +86,47 @@ export const addReceipt: RequestHandler = async (req, res, next) => {
         }
     }
 };
+
+/**
+ * Add members to a bill.
+ */
+export const addMembersToBill: RequestHandler = async (req, res, next) => {
+    const { billId, members } = req.body;
+
+    if (!billId || !Array.isArray(members)) {
+        throw new AppError(BILL_ERROR_MESSAGES.invalidBillData, 400, 'INVALID_BILL_DATA');
+    }
+
+    try {
+        const bill = await billModel.findById(billId);
+        if (!bill) {
+            throw new AppError(BILL_ERROR_MESSAGES.billNotFound, 404, 'BILL_NOT_FOUND');
+        }
+
+        const membersObjects = members.map((name: string) => ({
+            participantId: uuid(),
+            name,
+            finalOwed: 0,
+        }));
+
+        console.log('Adding members to bill:', membersObjects);
+
+        // Add members to the bill
+        bill.members.push(...membersObjects);
+        // console.log('Adding members to bill:', bill.members);
+        await bill.save();
+
+        res.status(200).json({
+            status: 'success',
+            message: 'Members added successfully',
+            data: bill,
+        });
+    } catch (error) {
+        if (error instanceof AppError && error.isOperational) {
+            return next(error);
+        }
+        return next(
+            new AppError(BILL_ERROR_MESSAGES.dataExtractionError, 500, 'ADD_MEMBERS_ERROR')
+        );
+    }
+};
