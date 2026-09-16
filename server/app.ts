@@ -1,6 +1,7 @@
 // External dependencies
 import express from 'express';
 import type { Request, Response, NextFunction } from 'express';
+import cookieParser from 'cookie-parser';
 
 // Internal dependencies
 import globalError from './controllers/errorController';
@@ -15,6 +16,7 @@ import usersRouter from './routes/userRouter';
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 app.use('/api/v1/bill', billsRouter);
 app.use('/api/v1/user', usersRouter);
 
