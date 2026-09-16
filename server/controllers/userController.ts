@@ -3,6 +3,7 @@ import { type RequestHandler } from 'express';
 
 // Internal dependencies
 import { UserModel } from '../model/userModel';
+import BillModel from '../model/billModel';
 
 import { AUTH_ERROR_MESSAGES } from '../utils/errorMessages';
 import AppError from '../utils/appError';
@@ -12,13 +13,16 @@ export const getProfile: RequestHandler = async (req, res, next) => {
         // Get user Details.
         const currentUser = req.user;
 
+        const bills = currentUser?.userBills?.map(async (id) => await BillModel.findById(id)) ?? [];
+        const billData = await Promise.all(bills);
+
         return res.status(200).json({
             status: 'success',
             data: {
                 userName: currentUser?.userName,
                 userEmail: currentUser?.userEmail,
                 userAccountStatus: currentUser?.userAccountStatus,
-                userBills: currentUser?.userBills,
+                userBills: billData,
             },
         });
     } catch (error) {

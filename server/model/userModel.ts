@@ -52,7 +52,7 @@ const userSchema = new Schema<UserDocument>({
         },
     },
     userBills: {
-        type: [{ type: String }],
+        type: [{ type: mongoose.Schema.ObjectId, ref: 'Bill' }],
     },
     userPasswordChangedAt: Date,
     userPasswordResetToken: String,
