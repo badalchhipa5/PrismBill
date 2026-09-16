@@ -10,7 +10,7 @@ import extractReceiptData from '../services/gemini/gemini';
 import uploadImageToCloudinary from '../services/cloudinary';
 
 import AppError from '../utils/appError';
-import { BILL_ERROR_MESSAGES } from '../utils/errorMessages';
+import { AUTH_ERROR_MESSAGES, BILL_ERROR_MESSAGES } from '../utils/errorMessages';
 
 /**
  * Handles receipt upload, OCR, AI extraction, persistence, and response to the client.
@@ -30,8 +30,7 @@ export const addReceipt: RequestHandler = async (req, res, next) => {
         const extractedText = await performOcrOnReceipt(uploadedFile.filename);
 
         // Upload the image to Cloudinary and get the URL.
-        // const imageUrl = await uploadImageToCloudinary(uploadedFile);
-        const imageUrl = 'await uploadImageToCloudinary(uploadedFile)';
+        const imageUrl = await uploadImageToCloudinary(uploadedFile);
 
         const extractedReceiptData = await extractReceiptData(
             {
@@ -42,7 +41,7 @@ export const addReceipt: RequestHandler = async (req, res, next) => {
             extractedText
         );
 
-        await billModel.create({
+        const bill = await billModel.create({
             merchantName: extractedReceiptData.merchantName || 'Unknown',
             date: extractedReceiptData.date || 'Unknown',
             imageUrl,
@@ -59,6 +58,12 @@ export const addReceipt: RequestHandler = async (req, res, next) => {
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
         });
+
+        if (!req.user) return next(new AppError(AUTH_ERROR_MESSAGES.notLoggedIn, 401));
+
+        req.user.userBills ??= [];
+        req.user.userBills.push(bill._id.toString());
+        await req.user.save({ validateBeforeSave: false });
 
         res.status(200).json({
             message: 'Receipt processed successfully',
@@ -109,11 +114,8 @@ export const addMembersToBill: RequestHandler = async (req, res, next) => {
             finalOwed: 0,
         }));
 
-        console.log('Adding members to bill:', membersObjects);
-
         // Add members to the bill
         bill.members.push(...membersObjects);
-        // console.log('Adding members to bill:', bill.members);
         await bill.save();
 
         res.status(200).json({
