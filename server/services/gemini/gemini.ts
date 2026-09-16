@@ -122,8 +122,8 @@ const extractReceiptData = async (
                                 responseSchema: {
                                     type: 'object',
                                     properties: {
-                                        merchantName: { type: ['string', 'null'] },
-                                        date: { type: ['string', 'null'] },
+                                        merchantName: { type: 'string' },
+                                        date: { type: 'string' },
                                         items: {
                                             type: 'array',
                                             items: {
@@ -144,12 +144,22 @@ const extractReceiptData = async (
                                                 ],
                                             },
                                         },
-                                        subtotal: { type: ['number', 'null'] },
-                                        tax: { type: ['number', 'null'] },
-                                        tip: { type: ['number', 'null'] },
-                                        total: { type: ['number', 'null'] },
-                                        currency: { type: ['string', 'null'] },
+                                        subtotal: { type: 'number' },
+                                        tax: { type: 'number' },
+                                        tip: { type: 'number' },
+                                        total: { type: 'number' },
+                                        currency: { type: 'string' },
                                     },
+                                    required: [
+                                        'merchantName',
+                                        'date',
+                                        'items',
+                                        'subtotal',
+                                        'tax',
+                                        'tip',
+                                        'total',
+                                        'currency',
+                                    ],
                                 },
                             },
                         }),
