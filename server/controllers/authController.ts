@@ -38,6 +38,17 @@ export const sendAuthTokenResponse = (
     statusCode: number
 ) => {
     const token = signJwt(user.id);
+
+    // Set cookie options.
+    const cookieOptions = {
+        expires: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000),
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+    };
+
+    // Set cookie in response.
+    res.cookie('jwt', token, cookieOptions);
+
     return res.status(statusCode).json({
         status: 'success',
         token,
@@ -51,11 +62,7 @@ export const sendAuthTokenResponse = (
 export const requireAuthentication: RequestHandler = async (req, res, next) => {
     try {
         // 1) Getting token and check if it's there.
-        let token;
-
-        if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-            token = req.headers.authorization.split(' ')[1];
-        }
+        const token = req.cookies.jwt;
 
         if (!token) {
             return next(new AppError(AUTH_ERROR_MESSAGES.notLoggedIn, 401));
