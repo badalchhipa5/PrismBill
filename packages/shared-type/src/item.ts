@@ -7,5 +7,5 @@ export interface Item {
 }
 
 export interface ItemWithAssignments extends Item {
-    assignedTo?: string[] | null;
+    assignedTo?: string | null;
 }

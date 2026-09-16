@@ -16,5 +16,5 @@ export interface User {
 
 export interface AuthenticatedUser extends User {
     _id: string | unknown;
-    save: () => Promise<AuthenticatedUser>;
+    save: (options?: { validateBeforeSave?: boolean }) => Promise<AuthenticatedUser>;
 }
