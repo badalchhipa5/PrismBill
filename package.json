@@ -36,13 +36,16 @@
         "format:check": "prettier --check ."
     },
     "devDependencies": {
+        "@types/jest": "^30.0.0",
         "eslint": "^9.39.4",
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-import": "^2.32.0",
         "eslint-plugin-react": "^7.37.5",
         "eslint-plugin-react-hooks": "^7.1.1",
         "globals": "^17.7.0",
+        "jest": "^30.5.2",
         "prettier": "^3.9.4",
+        "ts-jest": "^29.4.12",
         "typescript-eslint": "^8.62.1"
     },
     "dependencies": {
