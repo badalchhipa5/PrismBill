@@ -44,7 +44,7 @@ const mapOcrError = (error: unknown) => {
         ocrError.statusCode = 415;
         ocrError.errorMessage = 'OCR unsupported image format.';
         ocrError.errorName = 'OCR_UNSUPPORTED_FORMAT';
-    } else if (/confidence below threshold/i.test(errorMessage)) {
+    } else if (/confidence below threshold|low ocr confidence/i.test(errorMessage)) {
         ocrError.statusCode = 422;
         ocrError.errorMessage = 'OCR confidence too low.';
         ocrError.errorName = 'OCR_LOW_CONFIDENCE';
